@@ -7,13 +7,14 @@ services:
       - RABBITMQ_USER=user
       - RABBITMQ_PASS=password
     volumes:
+      # ca_certificate.pem, client_certificate.pem, client_key.pem
       - ./certs:/etc/ssl/certs
-      - ./app:/app
+      - ./publisher:/publisher
     command: >
       /bin/sh -c "
       pip install pika;
       sleep 60;
       while true; do
-        python /app/heartbeat.py;
+        python /publisher/hbeat.py;
         sleep 60;
       done"

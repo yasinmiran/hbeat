@@ -1,10 +1,10 @@
 import os
-import pika
 import ssl
+
+import pika
 
 
 def publish_heartbeat():
-    # Get RabbitMQ connection details from environment variables
     user = os.getenv('RABBITMQ_USER', 'user')
     password = os.getenv('RABBITMQ_PASS', 'password')
 
@@ -19,8 +19,8 @@ def publish_heartbeat():
 
     credentials = pika.PlainCredentials(user, password)
     connection_params = pika.ConnectionParameters(
-        host='public_rmq',  # RabbitMQ host
-        port=5671,  # AMQPS port
+        host='public_rmq',
+        port=5671,
         virtual_host='/',
         ssl_options=pika.SSLOptions(context),
         credentials=credentials
@@ -32,9 +32,9 @@ def publish_heartbeat():
 
     # Send a "Healthy" message to the default exchange
     channel.basic_publish(
-        exchange='amq.default',
-        routing_key='some_queue',
-        body='Healthy',
+        exchange='exchange',
+        routing_key='queue',
+        body=b"Healthy",
         properties=pika.BasicProperties(content_type='text/plain')
     )
 
