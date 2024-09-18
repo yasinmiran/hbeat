@@ -1,0 +1,19 @@
+version: '3'
+services:
+  hbeat:
+    image: python:3.10-alpine
+    container_name: hbeat
+    environment:
+      - RABBITMQ_USER=user
+      - RABBITMQ_PASS=password
+    volumes:
+      - ./certs:/etc/ssl/certs
+      - ./app:/app
+    command: >
+      /bin/sh -c "
+      pip install pika;
+      sleep 60;
+      while true; do
+        python /app/heartbeat.py;
+        sleep 60;
+      done"
